@@ -1,0 +1,49 @@
+name: eShopOnWeb Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+#env:
+ # RESOURCE_GROUP: rg-eshoponweb-NAME
+ # LOCATION: westeurope
+ # TEMPLATE_FILE: infra/webapp.bicep
+ # SUBSCRIPTION_ID: YOUR-SUBS-ID
+ # WEBAPP_NAME: eshoponweb-webapp-NAME
+
+jobs:
+  buildandtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build with dotnet
+        run: dotnet build ./eShopOnWeb.sln --configuration Release
+
+      - name: Test with dotnet
+        run: dotnet test ./eShopOnWeb.sln --configuration Release
+
+      - name: dotnet publish
+        run: |
+          dotnet publish ./src/Web/Web.csproj -c Release -o ${{ env.DOTNET_ROOT }}/myapp
+          cd ${{ env.DOTNET_ROOT }}/myapp
+          zip -r ../app.zip .
+
+      - name: Upload .NET App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: net-app
+          path: ${{ env.DOTNET_ROOT }}/app.zip
+
+      - name: Upload Bicep Template Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bicep-template
+          path: ${{ env.TEMPLATE_FILE }}
