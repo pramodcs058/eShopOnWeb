@@ -5,12 +5,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-  RESOURCE_GROUP: rg-eshoponweb-NAME
-  LOCATION: westeurope
-  TEMPLATE_FILE: infra/webapp.bicep
-  SUBSCRIPTION_ID: YOUR-SUBS-ID
-  WEBAPP_NAME: eshoponweb-webapp-NAME
+# env:
+# RESOURCE_GROUP: rg-eshoponweb-NAME
+# LOCATION: westeurope
+# TEMPLATE_FILE: infra/webapp.bicep
+# SUBSCRIPTION_ID: YOUR-SUBS-ID
+# WEBAPP_NAME: eshoponweb-webapp-NAME
 
 jobs:
   buildandtest:
